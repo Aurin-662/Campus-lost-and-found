@@ -6,19 +6,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloController {
+public class signupC {
     private Parent root;
     private Stage stage;
     private Scene scene;
 
 
     @FXML
-    public void log(ActionEvent event) throws IOException {
+    public void submit2(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
         root = loader.load();
 
@@ -27,8 +26,9 @@ public class HelloController {
         stage.setScene(scene);
         stage.show();
     }
-    public void signup(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("signup.fxml"));
+    @FXML
+    public void login(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
         root = loader.load();
 
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();

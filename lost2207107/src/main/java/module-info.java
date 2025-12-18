@@ -10,6 +10,8 @@ module org.example.lost2207107 {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires javafx.graphics;
+    requires javafx.base;
 
     opens org.example.lost2207107 to javafx.fxml;
     exports org.example.lost2207107;

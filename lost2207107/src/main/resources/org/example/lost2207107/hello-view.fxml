@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.lost2207107.HelloController">
    <children>
       <Label prefHeight="58.0" prefWidth="848.0" style="-fx-background-color: #000c74;" text="Lost and Found" textFill="WHITE">
          <padding>
@@ -33,7 +33,7 @@
             <Image url="@../../../images/lost-business-man-talking-with-phone-and-asking-for-help.png" />
          </image>
       </ImageView>
-      <Button layoutX="741.0" layoutY="16.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="72.0" text="Sign Up" />
-      <Button layoutX="639.0" layoutY="16.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="Log-In" />
+      <Button layoutX="741.0" layoutY="16.0" mnemonicParsing="false" onAction="#signup" prefHeight="26.0" prefWidth="72.0" text="Sign Up" />
+      <Button layoutX="639.0" layoutY="16.0" mnemonicParsing="false" onAction="#log" prefHeight="26.0" prefWidth="80.0" text="Log-In" />
    </children>
 </AnchorPane>
