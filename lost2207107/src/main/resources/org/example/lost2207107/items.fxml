@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <StackPane prefHeight="600" prefWidth="900" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.lost2207107.itemsC">
 
@@ -25,12 +26,24 @@
             <top>
                 <HBox alignment="CENTER_RIGHT" prefHeight="60" spacing="20" style="-fx-background-color: #1D2A51; -fx-padding: 10 20 10 20;">
                     <children>
-                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Home" textFill="WHITE" />
-                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Report Item" />
-                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="View Listings" />
+                  <Button mnemonicParsing="false" onAction="#home" style="-fx-background-color: #1D2A51;" text="Home" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#report" style="-fx-background-color: #1D2A51;" text="Report Item" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" style="-fx-background-color: #1D2A51;" text="View items" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
                         <ToggleButton fx:id="darkModeToggle" text="Dark Mode" />
-                        <Button style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Login" />
-                        <Button style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Signup" />
+                        <Button onAction="#log1" style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Login" />
+                        <Button onAction="#signup1" style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Signup" />
                     </children>
                 </HBox>
             </top>
@@ -40,7 +53,7 @@
                     <children>
                         <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #0d47a1;" text="Lost &amp; Found Management System" />
                         <Label style="-fx-font-size: 16px; -fx-text-fill: #555555;" text="Easily report and retrieve lost items with our system." />
-                        <Button style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20;" text="Report Item" />
+                        <Button onAction="#report" style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20;" text="Report Item" />
                     </children>
                     <padding>
                         <Insets bottom="40" left="0" right="0" top="40" />
