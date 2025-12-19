@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="564.0" prefWidth="586.0" style="-fx-border-radius: 15;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.lost2207107.signupC">
    <children>
-      <VBox layoutX="-2.0" prefHeight="624.0" prefWidth="606.0" style="-fx-background-color: #000c74;">
+      <VBox layoutX="-2.0" prefHeight="624.0" prefWidth="606.0" style="-fx-background-color: #1D2A51;">
          <children>
             <Label alignment="BOTTOM_CENTER" prefHeight="114.0" prefWidth="611.0" text="SIGN-UP" textFill="WHITE">
                <font>
@@ -80,7 +80,7 @@
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#login" prefHeight="26.0" prefWidth="82.0" style="-fx-background-color: #000c74;" text="Click here" textFill="#c7c9ff">
+                  <Button mnemonicParsing="false" onAction="#login" prefHeight="26.0" prefWidth="82.0" style="-fx-background-color: #1D2A51;" text="Click here" textFill="#c7c9ff">
                      <padding>
                         <Insets bottom="2.0" right="5.0" />
                      </padding>

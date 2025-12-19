@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="529.0" prefWidth="514.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.lost2207107.loginC">
    <children>
-      <VBox prefHeight="530.0" prefWidth="516.0" style="-fx-background-color: #000c74;">
+      <VBox prefHeight="530.0" prefWidth="516.0" style="-fx-background-color: #1D2A51;">
          <children>
             <Label alignment="BOTTOM_CENTER" prefHeight="127.0" prefWidth="524.0" text="LOG IN" textFill="WHITE">
                <font>
@@ -49,7 +49,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#sign" prefHeight="26.0" prefWidth="82.0" style="-fx-background-color: #000c74;" text="Click here" textFill="#c7c9ff">
+                  <Button mnemonicParsing="false" onAction="#sign" prefHeight="26.0" prefWidth="82.0" style="-fx-background-color: #1D2A51;" text="Click here" textFill="#c7c9ff">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>

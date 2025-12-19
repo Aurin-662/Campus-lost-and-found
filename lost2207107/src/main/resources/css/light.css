@@ -1,0 +1,19 @@
+.root {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #333333;
+}
+
+.label {
+    -fx-text-fill: #333333;
+}
+
+.button {
+    -fx-background-color: #1976d2;
+    -fx-text-fill: white;
+}
+
+.vbox, .hbox {
+    -fx-background-color: #fafafa;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
+}

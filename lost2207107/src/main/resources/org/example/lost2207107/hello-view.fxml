@@ -10,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.lost2207107.HelloController">
    <children>
-      <Label prefHeight="58.0" prefWidth="848.0" style="-fx-background-color: #000c74;" text="Lost and Found" textFill="WHITE">
+      <Label prefHeight="58.0" prefWidth="848.0" style="-fx-background-color: #1D2A51;" text="Lost and Found" textFill="WHITE">
          <padding>
             <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
          </padding>

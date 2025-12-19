@@ -1,14 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.lost2207107.itemsC"
-            prefHeight="400.0" prefWidth="600.0">
+<StackPane prefHeight="600" prefWidth="900" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.lost2207107.itemsC">
 
-</AnchorPane>
+    <children>
+        <ImageView fitHeight="600.0" fitWidth="900" opacity="0.15">
+            <image>
+                <Image url="@../../../../../../../../../../../pictures/1.jpg" />
+            </image>
+        </ImageView>
+
+        <BorderPane fx:id="root">
+
+            <top>
+                <HBox alignment="CENTER_RIGHT" prefHeight="60" spacing="20" style="-fx-background-color: #1D2A51; -fx-padding: 10 20 10 20;">
+                    <children>
+                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Home" textFill="WHITE" />
+                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Report Item" />
+                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="View Listings" />
+                        <ToggleButton fx:id="darkModeToggle" text="Dark Mode" />
+                        <Button style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Login" />
+                        <Button style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Signup" />
+                    </children>
+                </HBox>
+            </top>
+
+            <center>
+                <VBox alignment="CENTER" spacing="16">
+                    <children>
+                        <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #0d47a1;" text="Lost &amp; Found Management System" />
+                        <Label style="-fx-font-size: 16px; -fx-text-fill: #555555;" text="Easily report and retrieve lost items with our system." />
+                        <Button style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20;" text="Report Item" />
+                    </children>
+                    <padding>
+                        <Insets bottom="40" left="0" right="0" top="40" />
+                    </padding>
+                </VBox>
+            </center>
+            <bottom>
+                <HBox alignment="CENTER" prefWidth="900.0" spacing="30" style="-fx-padding: 20 0 40 0;">
+                    <children>
+                        <VBox alignment="CENTER" prefHeight="120" prefWidth="220" spacing="10" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;                                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2); -fx-padding: 15;">
+                            <children>
+                                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0d47a1;" text="Easy Reporting" />
+                                <Label style="-fx-text-fill: #555555;" text="Quickly submit lost and found reports." wrapText="true" />
+                            </children>
+                        </VBox>
+
+                              <VBox alignment="CENTER" prefHeight="120" prefWidth="220" spacing="10" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;                                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2); -fx-padding: 15;">
+                            <children>
+                                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0d47a1;" text="Verified Listings" />
+                                <Label style="-fx-text-fill: #555555;" text="Ensuring accurate and valid reports." wrapText="true" />
+                            </children>
+                        </VBox>
+
+                              <VBox alignment="CENTER" prefHeight="120" prefWidth="220" spacing="10" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;                                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2); -fx-padding: 15;">
+                            <children>
+                                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0d47a1;" text="Secure System" />
+                                <Label style="-fx-text-fill: #555555;" text="Your data is safe and protected." wrapText="true" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </bottom>
+        </BorderPane>
+    </children>
+</StackPane>
