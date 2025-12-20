@@ -4,7 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -16,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 public class lostC {
 
@@ -31,12 +34,10 @@ public class lostC {
 
     @FXML private FlowPane thumbnailContainer;
 
-    // store selected image path
     private String selectedImagePath = null;
 
     @FXML
     public void initialize() {
-        // Submit button → collect data and show view page
         submitButton.setOnAction(event -> {
             String itemName = safe(itemNameField.getText());
             String description = safe(descriptionArea.getText());
@@ -47,18 +48,18 @@ public class lostC {
             showViewScene(itemName, description, location, date, contact, selectedImagePath);
         });
 
-        // Cancel button → clear all fields
         cancelButton.setOnAction(e -> {
-            itemNameField.clear();
-            descriptionArea.clear();
-            locationField.clear();
-            datePicker.setValue(null);
-            contactInfoField.clear();
-            thumbnailContainer.getChildren().clear();
-            selectedImagePath = null;
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Cancel");
+            alert.setHeaderText("Are you sure?");
+            alert.setContentText("Your data will be discarded.");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                loadReportScene();
+            }
         });
 
-        // Browse button → open FileChooser and show thumbnails
         browseButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select Image");
@@ -79,7 +80,6 @@ public class lostC {
         });
     }
 
-    // Switch to view.fxml and pass data
     private void showViewScene(String itemName, String description, String location,
                                String date, String contact, String imagePath) {
         try {
@@ -87,12 +87,24 @@ public class lostC {
             Parent root = loader.load();
 
             viewC controller = loader.getController();
-            // now pass imagePath too
             controller.addLostItem(itemName, description, location, date, contact, imagePath);
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             Scene scene = new Scene(root, 900, 600);
-            // Default theme load (light.css)
+            scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadReportScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("report.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
+            Scene scene = new Scene(root, 900, 600);
             scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
             stage.setScene(scene);
         } catch (IOException e) {

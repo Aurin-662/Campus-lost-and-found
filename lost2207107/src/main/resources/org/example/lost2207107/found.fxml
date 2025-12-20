@@ -9,67 +9,72 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="lostItemsRoot" spacing="20.0" styleClass="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.lost2207107.foundC">
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-   <children>
-      <Label styleClass="header-1" text="Report found Item" />
-      <VBox spacing="15.0" styleClass="card">
-         <children>
-            <Label styleClass="label-title" text="Item Details" />
-            <VBox spacing="5.0">
-               <children>
-                  <Label styleClass="label-body" text="Item Name *" />
-                  <TextField fx:id="itemNameField" promptText="Enter item name" />
-               </children>
-            </VBox>
-            <VBox spacing="5.0" />
-            <VBox spacing="5.0">
-               <children>
-                  <Label styleClass="label-body" text="Description" />
-                  <TextArea fx:id="descriptionArea" prefRowCount="3" promptText="Enter item description" />
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <Label styleClass="label-body" text="Location *" />
-                  <TextField fx:id="locationField" promptText="Enter location where item was lost" />
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <Label styleClass="label-body" text="Date Found *" />
-                  <DatePicker fx:id="datePicker" promptText="Select date" />
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <Label styleClass="label-body" text="Contact Information *" />
-                  <TextField fx:id="contactInfoField" promptText="Enter your contact information" />
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <Label styleClass="label-body" text="Images" />
-                  <VBox fx:id="imageUploadContainer" spacing="10.0">
-                     <children>
-                        <Button fx:id="browseButton" mnemonicParsing="false" styleClass="secondary-button" text="Browse Images" />
-                        <FlowPane fx:id="thumbnailContainer" hgap="10.0" vgap="10.0" />
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-            <VBox alignment="CENTER_RIGHT" spacing="10.0">
-               <children>
-                  <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="secondary-button" text="Cancel" />
-                  <Button fx:id="submitButton" mnemonicParsing="false" styleClass="primary-button" text="Report Found Item" />
-               </children>
-            </VBox>
-         </children>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </VBox>
-   </children>
+<VBox fx:id="foundItemsRoot"
+      spacing="20.0"
+      styleClass="root"
+      xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.lost2207107.foundC">
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <children>
+        <Label styleClass="header-1" text="Report Found Item"/>
+        <VBox spacing="15.0" styleClass="card">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
+            <children>
+                <Label styleClass="label-title" text="Item Details"/>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="label-body" text="Item Name *"/>
+                        <TextField fx:id="itemNameField" promptText="Enter item name"/>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="label-body" text="Description"/>
+                        <TextArea fx:id="descriptionArea" prefRowCount="3" promptText="Enter item description"/>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="label-body" text="Location *"/>
+                        <TextField fx:id="locationField" promptText="Enter location where item was found"/>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="label-body" text="Date Found *"/>
+                        <DatePicker fx:id="datePicker" promptText="Select date"/>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="label-body" text="Contact Information *"/>
+                        <TextField fx:id="contactInfoField" promptText="Enter your contact information"/>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label styleClass="label-body" text="Images"/>
+                        <VBox fx:id="imageUploadContainer" spacing="10.0">
+                            <children>
+                                <Button fx:id="browseButton" mnemonicParsing="false" styleClass="secondary-button" text="Browse Images"/>
+                                <FlowPane fx:id="thumbnailContainer" hgap="10.0" vgap="10.0"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER_RIGHT" spacing="10.0">
+                    <children>
+                        <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="secondary-button" text="Cancel"/>
+                        <Button fx:id="submitButton" mnemonicParsing="false" styleClass="primary-button" text="Report Found Item"/>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
 </VBox>
