@@ -34,6 +34,16 @@ public class itemsC {
         stage.setScene(scene);
         stage.show();
     }
+    @FXML
+    public void vieww(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view.fxml"));
+        root1 = loader.load();
+
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root1);
+        stage.setScene(scene);
+        stage.show();
+    }
     public void signup1(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("signup.fxml"));
         root1 = loader.load();

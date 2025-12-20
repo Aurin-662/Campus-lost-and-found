@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -16,15 +17,33 @@ import java.io.IOException;
 
 public class viewC {
 
+    @FXML private BorderPane viewRoot;
     @FXML private Label welcomeLabel;
     @FXML private FlowPane lostItemsContainer;
     @FXML private FlowPane foundItemsContainer;
+
+
+    @FXML private Button postItemBtn;
+    @FXML private Button feedBtn;
+    @FXML private Button responsesBtn;
+    @FXML private Button signOutBtn;
+
+    @FXML
+    public void initialize() {
+
+        postItemBtn.setOnAction(e -> loadScene("report.fxml"));
+        feedBtn.setOnAction(e -> loadScene("items.fxml"));
+        responsesBtn.setOnAction(e -> loadScene("responses.fxml"));
+        signOutBtn.setOnAction(e -> loadScene("hello-view.fxml"));
+    }
+
 
     public void addLostItem(String itemName, String description, String location,
                             String date, String contact, String imagePath) {
         VBox card = createCard(itemName, description, location, date, contact, imagePath);
         lostItemsContainer.getChildren().add(card);
     }
+
 
     public void addFoundItem(String itemName, String description, String location,
                              String date, String contact, String imagePath) {
@@ -89,5 +108,19 @@ public class viewC {
 
     private String fallback(String s, String def) {
         return (s == null || s.isBlank()) ? def : s;
+    }
+
+    private void loadScene(String fxmlFile) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) viewRoot.getScene().getWindow();
+            Scene scene = new Scene(root, 900, 600);
+            scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

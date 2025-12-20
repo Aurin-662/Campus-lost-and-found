@@ -8,7 +8,10 @@
 }
 
 .button {
-    -fx-background-color: #1976d2;
+    -fx-background-color: #1D2A51;
+    -fx-border-color: cyan;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
     -fx-text-fill: white;
 }
 

@@ -36,7 +36,7 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" style="-fx-background-color: #1D2A51;" text="View items" textFill="WHITE">
+                  <Button mnemonicParsing="false" onAction="#vieww" style="-fx-background-color: #1D2A51;" text="View items" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
