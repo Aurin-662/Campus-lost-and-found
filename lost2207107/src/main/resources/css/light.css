@@ -17,3 +17,64 @@
     -fx-background-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
 }
+/* Root background */
+.view-root {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Navigation bar labels */
+.nav-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+}
+
+/* Welcome message */
+.welcome-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d47a1;
+}
+
+/* Section headers: Lost items, Found items */
+.section-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d47a1;
+    -fx-underline: true;
+}
+
+/* Card container */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #dddddd;
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
+    -fx-pref-width: 250;
+    -fx-pref-height: 220;
+}
+
+/* Card title */
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d47a1;
+}
+
+/* Card labels */
+.card-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #555555;
+}
+
+/* Image thumbnails inside cards */
+.card ImageView {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
