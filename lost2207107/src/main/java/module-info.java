@@ -12,6 +12,7 @@ module org.example.lost2207107 {
     requires com.almasb.fxgl.all;
     requires javafx.graphics;
     requires javafx.base;
+    requires java.sql;
 
     opens org.example.lost2207107 to javafx.fxml;
     exports org.example.lost2207107;
