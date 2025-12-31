@@ -38,7 +38,6 @@ public class foundC {
 
     @FXML
     public void initialize() {
-
         submitButton.setOnAction(event -> {
             String itemName = safe(itemNameField.getText());
             String description = safe(descriptionArea.getText());
@@ -46,7 +45,33 @@ public class foundC {
             String date = (datePicker.getValue() != null) ? datePicker.getValue().toString() : "";
             String contact = safe(contactInfoField.getText());
 
-            showViewScene(itemName, description, location, date, contact, selectedImagePath);
+            // Save to database (now with contact + imagePath)
+            boolean success = DatabaseHelper.insertFoundItem(
+                    1, // TODO: replace with actual logged-in user id
+                    itemName,
+                    description,
+                    date,
+                    location,
+                    contact,
+                    selectedImagePath
+            );
+
+            if (success) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText("Found Item Submitted");
+                alert.setContentText("Your found item has been recorded.");
+                alert.showAndWait();
+
+                // Show in view scene
+                showViewScene(itemName, description, location, date, contact, selectedImagePath);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Submission Failed");
+                alert.setContentText("Could not save found item. Try again.");
+                alert.showAndWait();
+            }
         });
 
         cancelButton.setOnAction(e -> {
@@ -60,7 +85,6 @@ public class foundC {
                 loadReportScene();
             }
         });
-
 
         browseButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
@@ -107,7 +131,6 @@ public class foundC {
 
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             Scene scene = new Scene(root, 900, 600);
-            /*scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());*/
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

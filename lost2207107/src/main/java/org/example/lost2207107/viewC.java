@@ -14,6 +14,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class viewC {
 
@@ -22,29 +26,79 @@ public class viewC {
     @FXML private FlowPane lostItemsContainer;
     @FXML private FlowPane foundItemsContainer;
 
-
     @FXML private Button postItemBtn;
     @FXML private Button feedBtn;
     @FXML private Button responsesBtn;
     @FXML private Button signOutBtn;
 
+    private static final String URL = "jdbc:sqlite:users.db";
+
     @FXML
     public void initialize() {
-
-       // postItemBtn.setOnAction(e -> loadScene("report.fxml"));
+        // Navigation
         feedBtn.setOnAction(e -> loadScene("items.fxml"));
         responsesBtn.setOnAction(e -> loadScene("responses.fxml"));
         signOutBtn.setOnAction(e -> loadScene("signup.fxml"));
+
+        // Load items from DB
+        loadLostItems();
+        loadFoundItems();
     }
 
+    // Load lost items from DB
+    private void loadLostItems() {
+        lostItemsContainer.getChildren().clear();
+        try (Connection conn = DriverManager.getConnection(URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM lost_items")) {
 
+            while (rs.next()) {
+                String itemName = rs.getString("item_name");
+                String description = rs.getString("description");
+                String location = rs.getString("location");
+                String date = rs.getString("date_lost");
+                String contact = rs.getString("contact");
+                String imagePath = rs.getString("image_path");
+
+                VBox card = createCard(itemName, description, location, date, contact, imagePath);
+                lostItemsContainer.getChildren().add(card);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Load found items from DB
+    private void loadFoundItems() {
+        foundItemsContainer.getChildren().clear();
+        try (Connection conn = DriverManager.getConnection(URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM found_items")) {
+
+            while (rs.next()) {
+                String itemName = rs.getString("item_name");
+                String description = rs.getString("description");
+                String location = rs.getString("location");
+                String date = rs.getString("date_found");
+                String contact = rs.getString("contact");
+                String imagePath = rs.getString("image_path");
+
+                VBox card = createCard(itemName, description, location, date, contact, imagePath);
+                foundItemsContainer.getChildren().add(card);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Called from lostC after submission
     public void addLostItem(String itemName, String description, String location,
                             String date, String contact, String imagePath) {
         VBox card = createCard(itemName, description, location, date, contact, imagePath);
         lostItemsContainer.getChildren().add(card);
     }
 
-
+    // Called from foundC after submission
     public void addFoundItem(String itemName, String description, String location,
                              String date, String contact, String imagePath) {
         VBox card = createCard(itemName, description, location, date, contact, imagePath);

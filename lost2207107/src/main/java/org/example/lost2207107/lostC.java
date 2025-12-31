@@ -45,7 +45,33 @@ public class lostC {
             String date = (datePicker.getValue() != null) ? datePicker.getValue().toString() : "";
             String contact = safe(contactInfoField.getText());
 
-            showViewScene(itemName, description, location, date, contact, selectedImagePath);
+            // Save to database
+            boolean success = DatabaseHelper.insertLostItem(
+                    1, // TODO: replace with actual logged-in user id
+                    itemName,
+                    description,
+                    date,
+                    location,
+                    contact,
+                    selectedImagePath
+            );
+
+            if (success) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText("Lost Item Submitted");
+                alert.setContentText("Your lost item has been recorded.");
+                alert.showAndWait();
+
+                // Show in view scene
+                showViewScene(itemName, description, location, date, contact, selectedImagePath);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Submission Failed");
+                alert.setContentText("Could not save lost item. Try again.");
+                alert.showAndWait();
+            }
         });
 
         cancelButton.setOnAction(e -> {
@@ -105,7 +131,6 @@ public class lostC {
 
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             Scene scene = new Scene(root, 900, 600);
-       //     scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
