@@ -22,7 +22,7 @@
       </ImageView>
       <BorderPane fx:id="root">
          <top>
-            <HBox alignment="CENTER_RIGHT" prefHeight="60" spacing="20" style="-fx-background-color: #1D2A51; -fx-padding: 10 20 10 20;">
+            <HBox alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="900.0" spacing="20" style="-fx-background-color: #1D2A51; -fx-padding: 10 20 10 20;">
                <children>
                   <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="661.0" spacing="20" style="-fx-background-color: #1D2A51; -fx-padding: 10 20 10 20;">
                      <children>
@@ -31,14 +31,18 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #1D2A51;" text="View items" textFill="WHITE">
+                        <Button mnemonicParsing="false" style="-fx-background-color: #1D2A51;" text="Report Item" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#vieww" style="-fx-background-color: #1D2A51;" text="View items" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
                         <ToggleButton fx:id="darkModeToggle1" text="Dark Mode" />
-                        <Button onAction="#log" style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Login" />
-                        <Button onAction="#signup" style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Signup" />
+                        <Button onAction="#signup" style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Sign-out" />
                      </children>
                   </HBox>
                </children>

@@ -107,7 +107,7 @@ public class foundC {
 
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             Scene scene = new Scene(root, 900, 600);
-            scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
+            /*scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());*/
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

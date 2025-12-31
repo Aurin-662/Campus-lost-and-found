@@ -31,10 +31,10 @@ public class viewC {
     @FXML
     public void initialize() {
 
-        postItemBtn.setOnAction(e -> loadScene("report.fxml"));
+       // postItemBtn.setOnAction(e -> loadScene("report.fxml"));
         feedBtn.setOnAction(e -> loadScene("items.fxml"));
         responsesBtn.setOnAction(e -> loadScene("responses.fxml"));
-        signOutBtn.setOnAction(e -> loadScene("hello-view.fxml"));
+        signOutBtn.setOnAction(e -> loadScene("signup.fxml"));
     }
 
 
@@ -116,8 +116,8 @@ public class viewC {
             Parent root = loader.load();
 
             Stage stage = (Stage) viewRoot.getScene().getWindow();
-            Scene scene = new Scene(root, 900, 600);
-            scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
+            Scene scene = new Scene(root);
+
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

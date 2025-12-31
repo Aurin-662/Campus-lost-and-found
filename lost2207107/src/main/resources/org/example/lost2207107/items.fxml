@@ -42,8 +42,7 @@
                      </font>
                   </Button>
                         <ToggleButton fx:id="darkModeToggle" text="Dark Mode" />
-                        <Button onAction="#log1" style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Login" />
-                        <Button onAction="#signup1" style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Signup" />
+                        <Button onAction="#signup1" style="-fx-background-color: #1976d2; -fx-text-fill: white;" text="Sign-out" />
                     </children>
                 </HBox>
             </top>

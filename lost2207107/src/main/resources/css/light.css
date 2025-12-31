@@ -7,13 +7,13 @@
     -fx-text-fill: #333333;
 }
 
-.button {
+/*.button {
     -fx-background-color: #1D2A51;
     -fx-border-color: cyan;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
     -fx-text-fill: white;
-}
+}*/
 
 .vbox, .hbox {
     -fx-background-color: #fafafa;
@@ -28,7 +28,7 @@
 .nav-label {
     -fx-font-size: 14px;
     -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
+    /*-fx-font-weight: bold;*/
     -fx-padding: 5 10;
     -fx-cursor: hand;
 }
