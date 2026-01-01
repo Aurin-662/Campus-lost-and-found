@@ -18,6 +18,16 @@ public class loginC {
     @FXML private PasswordField passwordField;
     @FXML private Label statusLabel;
 
+    // Static field to store logged-in user ID
+    private static int loggedInUserId = -1;
+
+    public static void setLoggedInUserId(int id) {
+        loggedInUserId = id;
+    }
+
+    public static int getLoggedInUserId() {
+        return loggedInUserId;
+    }
 
     @FXML
     public void submit1(ActionEvent event) {
@@ -30,7 +40,11 @@ public class loginC {
         }
 
         if (DatabaseHelper.validateUser(user, pass)) {
-            statusLabel.setText(" Login successful!");
+            statusLabel.setText("Login successful!");
+
+            // Get user ID from database and store it
+            int userId = DatabaseHelper.getUserId(user);
+            setLoggedInUserId(userId);
 
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("items.fxml"));
@@ -41,14 +55,13 @@ public class loginC {
 
                 stage.setScene(scene);
             } catch (IOException e) {
-                statusLabel.setText(" Failed to load items page.");
+                statusLabel.setText("Failed to load items page.");
                 e.printStackTrace();
             }
         } else {
-            statusLabel.setText(" Invalid username or password.");
+            statusLabel.setText("Invalid username or password.");
         }
     }
-
 
     @FXML
     public void sign(ActionEvent event) {

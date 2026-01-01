@@ -45,9 +45,9 @@ public class lostC {
             String date = (datePicker.getValue() != null) ? datePicker.getValue().toString() : "";
             String contact = safe(contactInfoField.getText());
 
-            // Save to database
+            int userId = loginC.getLoggedInUserId();
             boolean success = DatabaseHelper.insertLostItem(
-                    1, // TODO: replace with actual logged-in user id
+                    userId,
                     itemName,
                     description,
                     date,
@@ -113,7 +113,7 @@ public class lostC {
             Parent root = loader.load();
 
             viewC controller = loader.getController();
-            controller.addLostItem(itemName, description, location, date, contact, imagePath);
+         //   controller.addLostItem(itemName, description, location, date, contact, imagePath);
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             Scene scene = new Scene(root, 900, 600);

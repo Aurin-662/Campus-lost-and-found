@@ -33,6 +33,9 @@ public class viewC {
 
     private static final String URL = "jdbc:sqlite:users.db";
 
+    // Logged-in user id from login/session
+    private int currentUserId = loginC.getLoggedInUserId();
+
     @FXML
     public void initialize() {
         // Navigation
@@ -40,7 +43,7 @@ public class viewC {
         responsesBtn.setOnAction(e -> loadScene("responses.fxml"));
         signOutBtn.setOnAction(e -> loadScene("signup.fxml"));
 
-        // Load items from DB
+        // Always load items fresh from DB
         loadLostItems();
         loadFoundItems();
     }
@@ -53,6 +56,8 @@ public class viewC {
              ResultSet rs = stmt.executeQuery("SELECT * FROM lost_items")) {
 
             while (rs.next()) {
+                int itemId = rs.getInt("id");
+                int userId = rs.getInt("user_id");
                 String itemName = rs.getString("item_name");
                 String description = rs.getString("description");
                 String location = rs.getString("location");
@@ -60,7 +65,8 @@ public class viewC {
                 String contact = rs.getString("contact");
                 String imagePath = rs.getString("image_path");
 
-                VBox card = createCard(itemName, description, location, date, contact, imagePath);
+
+                VBox card = createCard(itemId, userId, itemName, description, location, date, contact, imagePath, true);
                 lostItemsContainer.getChildren().add(card);
             }
         } catch (Exception e) {
@@ -76,6 +82,8 @@ public class viewC {
              ResultSet rs = stmt.executeQuery("SELECT * FROM found_items")) {
 
             while (rs.next()) {
+                int itemId = rs.getInt("id");
+                int userId = rs.getInt("user_id");
                 String itemName = rs.getString("item_name");
                 String description = rs.getString("description");
                 String location = rs.getString("location");
@@ -83,7 +91,8 @@ public class viewC {
                 String contact = rs.getString("contact");
                 String imagePath = rs.getString("image_path");
 
-                VBox card = createCard(itemName, description, location, date, contact, imagePath);
+
+                VBox card = createCard(itemId, userId, itemName, description, location, date, contact, imagePath, false);
                 foundItemsContainer.getChildren().add(card);
             }
         } catch (Exception e) {
@@ -91,28 +100,17 @@ public class viewC {
         }
     }
 
-    // Called from lostC after submission
-    public void addLostItem(String itemName, String description, String location,
-                            String date, String contact, String imagePath) {
-        VBox card = createCard(itemName, description, location, date, contact, imagePath);
-        lostItemsContainer.getChildren().add(card);
-    }
-
-    // Called from foundC after submission
-    public void addFoundItem(String itemName, String description, String location,
-                             String date, String contact, String imagePath) {
-        VBox card = createCard(itemName, description, location, date, contact, imagePath);
-        foundItemsContainer.getChildren().add(card);
-    }
-
-    private void openDetailsPage(String itemName, String description, String location,
-                                 String date, String contact, String imagePath) {
+    // Open details page
+    private void openDetailsPage(int itemId, int userId, String itemName, String description, String location,
+                                 String date, String contact, String imagePath, boolean isLostItem) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("details.fxml"));
             Parent root = loader.load();
 
             detailsC controller = loader.getController();
-            controller.setData(itemName, description, location, date, contact, imagePath);
+
+            controller.setData(itemId, itemName, description, location, date, contact, imagePath,
+                    userId, currentUserId, isLostItem);
 
             Stage stage = new Stage();
             stage.setTitle("Item Details");
@@ -123,8 +121,9 @@ public class viewC {
         }
     }
 
-    private VBox createCard(String itemName, String description, String location,
-                            String date, String contact, String imagePath) {
+    // Create card for item
+    private VBox createCard(int itemId, int userId, String itemName, String description, String location,
+                            String date, String contact, String imagePath, boolean isLostItem) {
         VBox card = new VBox(8);
         card.getStyleClass().add("card");
 
@@ -145,7 +144,7 @@ public class viewC {
         Label locLabel = new Label("Location: " + fallback(location, "N/A"));
         locLabel.getStyleClass().add("card-label");
 
-        Label dateLabel = new Label("Date: " + fallback(date, "N/A"));
+        Label dateLabel = new Label((isLostItem ? "Date Lost: " : "Date Found: ") + fallback(date, "N/A"));
         dateLabel.getStyleClass().add("card-label");
 
         Label contactLabel = new Label("Contact: " + fallback(contact, "N/A"));
@@ -153,7 +152,8 @@ public class viewC {
 
         Button viewButton = new Button("View");
         viewButton.getStyleClass().add("primary-button");
-        viewButton.setOnAction(e -> openDetailsPage(itemName, description, location, date, contact, imagePath));
+        viewButton.setOnAction(e -> openDetailsPage(itemId, userId, itemName, description, location,
+                date, contact, imagePath, isLostItem));
 
         card.getChildren().addAll(titleLabel, descLabel, locLabel, dateLabel, contactLabel, viewButton);
 

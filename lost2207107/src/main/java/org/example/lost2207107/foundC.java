@@ -45,9 +45,9 @@ public class foundC {
             String date = (datePicker.getValue() != null) ? datePicker.getValue().toString() : "";
             String contact = safe(contactInfoField.getText());
 
-            // Save to database (now with contact + imagePath)
+            int userId = loginC.getLoggedInUserId(); 
             boolean success = DatabaseHelper.insertFoundItem(
-                    1, // TODO: replace with actual logged-in user id
+                    userId,
                     itemName,
                     description,
                     date,
@@ -113,7 +113,7 @@ public class foundC {
             Parent root = loader.load();
 
             viewC controller = loader.getController();
-            controller.addFoundItem(itemName, description, location, date, contact, imagePath);
+          //  controller.addFoundItem(itemName, description, location, date, contact, imagePath);
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             Scene scene = new Scene(root, 900, 600);

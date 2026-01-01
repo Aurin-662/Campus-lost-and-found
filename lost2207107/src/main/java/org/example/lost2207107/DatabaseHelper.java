@@ -42,17 +42,7 @@ public class DatabaseHelper {
                     "FOREIGN KEY(user_id) REFERENCES users(id))";
             stmt.execute(sqlFound);
 
-            // Reports table
-            String sqlReports = "CREATE TABLE IF NOT EXISTS reports (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "lost_item_id INTEGER," +
-                    "found_item_id INTEGER," +
-                    "status TEXT DEFAULT 'Pending'," +
-                    "FOREIGN KEY(lost_item_id) REFERENCES lost_items(id)," +
-                    "FOREIGN KEY(found_item_id) REFERENCES found_items(id))";
-            stmt.execute(sqlReports);
-
-            System.out.println("✅ Database initialized with expanded tables.");
+            System.out.println("✅ Database initialized with owner-based tables.");
 
         } catch (SQLException e) {
             System.err.println("Database initialization failed:");
@@ -88,6 +78,22 @@ public class DatabaseHelper {
             System.err.println("Login validation failed: " + e.getMessage());
             return false;
         }
+    }
+
+    // Get user ID by username
+    public static int getUserId(String username) {
+        String sql = "SELECT id FROM users WHERE username=?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.err.println("User ID fetch failed: " + e.getMessage());
+        }
+        return -1; // fallback if not found
     }
 
     // Insert lost item
@@ -132,17 +138,30 @@ public class DatabaseHelper {
         }
     }
 
-    // Create report
-    public static boolean createReport(int lostItemId, int foundItemId) {
-        String sql = "INSERT INTO reports(lost_item_id, found_item_id, status) VALUES(?, ?, 'Pending')";
+    // Delete lost item (ownership enforced)
+    public static boolean deleteLostItem(int itemId, int userId) {
+        String sql = "DELETE FROM lost_items WHERE id=? AND user_id=?";
         try (Connection conn = DriverManager.getConnection(URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, lostItemId);
-            pstmt.setInt(2, foundItemId);
-            pstmt.executeUpdate();
-            return true;
+            pstmt.setInt(1, itemId);
+            pstmt.setInt(2, userId);
+            return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Report creation failed: " + e.getMessage());
+            System.err.println("Delete lost item failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Delete found item (ownership enforced)
+    public static boolean deleteFoundItem(int itemId, int userId) {
+        String sql = "DELETE FROM found_items WHERE id=? AND user_id=?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, itemId);
+            pstmt.setInt(2, userId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Delete found item failed: " + e.getMessage());
             return false;
         }
     }
