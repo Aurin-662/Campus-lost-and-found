@@ -24,6 +24,8 @@ public class detailsC {
 
     @FXML private Button editButton;
     @FXML private Button deleteButton;
+    @FXML private Button foundButton;
+    @FXML private Button claimButton;
 
     private int itemId;
     private int itemUserId;     // owner id from DB
@@ -49,13 +51,24 @@ public class detailsC {
             itemImage.setImage(new Image(imagePath));
         }
 
-        // Show/hide edit/delete buttons based on owner check
+        // Show/hide buttons based on owner check
         boolean isOwner = (itemUserId == currentUserId);
         editButton.setVisible(isOwner);
         deleteButton.setVisible(isOwner);
 
         deleteButton.setOnAction(e -> deleteItem());
         editButton.setOnAction(e -> editItem());
+
+        //  Non-owner actions
+        if (!isOwner) {
+            if (isLostItem) {
+                foundButton.setVisible(true);
+                foundButton.setOnAction(e -> reportFoundItem());
+            } else {
+                claimButton.setVisible(true);
+                claimButton.setOnAction(e -> claimFoundItem());
+            }
+        }
     }
 
     private void deleteItem() {
@@ -123,6 +136,29 @@ public class detailsC {
         } catch (IOException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to open edit form.");
+            alert.showAndWait();
+        }
+    }
+
+    //  Non-owner actions
+    private void reportFoundItem() {
+        boolean success = DatabaseHelper.createReport(itemId, 0, currentUserId);
+        if (success) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Owner has been notified that you found this item.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to notify owner.");
+            alert.showAndWait();
+        }
+    }
+
+    private void claimFoundItem() {
+        boolean success = DatabaseHelper.createReport(0, itemId, currentUserId);
+        if (success) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Owner has been notified of your claim.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to notify owner.");
             alert.showAndWait();
         }
     }

@@ -42,6 +42,18 @@ public class DatabaseHelper {
                     "FOREIGN KEY(user_id) REFERENCES users(id))";
             stmt.execute(sqlFound);
 
+            // Reports table for Found/Claim workflow
+            String sqlReports = "CREATE TABLE IF NOT EXISTS reports (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "lost_item_id INTEGER," +
+                    "found_item_id INTEGER," +
+                    "reporter_id INTEGER NOT NULL," +
+                    "status TEXT DEFAULT 'Pending'," +
+                    "FOREIGN KEY(lost_item_id) REFERENCES lost_items(id)," +
+                    "FOREIGN KEY(found_item_id) REFERENCES found_items(id)," +
+                    "FOREIGN KEY(reporter_id) REFERENCES users(id))";
+            stmt.execute(sqlReports);
+
             System.out.println("✅ Database initialized with owner-based tables.");
 
         } catch (SQLException e) {
@@ -204,6 +216,32 @@ public class DatabaseHelper {
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Delete found item failed: " + e.getMessage());
+            return false;
+        }
+    }
+    // Create report entry for Found/Claim workflow
+    public static boolean createReport(int lostItemId, int foundItemId, int reporterId) {
+        String sql = "INSERT INTO reports(lost_item_id, found_item_id, reporter_id, status) VALUES(?, ?, ?, 'Pending')";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            if (lostItemId > 0) {
+                pstmt.setInt(1, lostItemId);
+            } else {
+                pstmt.setNull(1, Types.INTEGER);
+            }
+
+            if (foundItemId > 0) {
+                pstmt.setInt(2, foundItemId);
+            } else {
+                pstmt.setNull(2, Types.INTEGER);
+            }
+
+            pstmt.setInt(3, reporterId);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Report creation failed: " + e.getMessage());
             return false;
         }
     }
