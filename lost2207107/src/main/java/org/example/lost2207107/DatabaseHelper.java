@@ -53,6 +53,15 @@ public class DatabaseHelper {
                     "FOREIGN KEY(found_item_id) REFERENCES found_items(id)," +
                     "FOREIGN KEY(reporter_id) REFERENCES users(id))";
             stmt.execute(sqlReports);
+            // Notifications table
+            String sqlNotifications = "CREATE TABLE IF NOT EXISTS notifications (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "user_id INTEGER NOT NULL, " +
+                    "report_id INTEGER NOT NULL, " +
+                    "message TEXT NOT NULL, " +
+                    "timestamp TEXT DEFAULT CURRENT_TIMESTAMP, " +
+                    "FOREIGN KEY(user_id) REFERENCES users(id))";
+            stmt.execute(sqlNotifications);
 
             System.out.println("✅ Database initialized with owner-based tables.");
 
@@ -242,6 +251,79 @@ public class DatabaseHelper {
             return true;
         } catch (SQLException e) {
             System.err.println("Report creation failed: " + e.getMessage());
+            return false;
+        }
+    }
+    // Get all reports for a given owner (lost or found items)
+    public static ResultSet getReportsForOwner(int ownerId) {
+        String sql = "SELECT r.id, r.lost_item_id, r.found_item_id, r.reporter_id, r.status, " +
+                "l.item_name AS lost_name, l.location AS lost_location, l.date_lost AS lost_date, " +
+                "f.item_name AS found_name, f.location AS found_location, f.date_found AS found_date " +
+                "FROM reports r " +
+                "LEFT JOIN lost_items l ON r.lost_item_id = l.id " +
+                "LEFT JOIN found_items f ON r.found_item_id = f.id " +
+                "WHERE (l.user_id = ? OR f.user_id = ?)";
+        try {
+            Connection conn = DriverManager.getConnection(URL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, ownerId);
+            pstmt.setInt(2, ownerId);
+            return pstmt.executeQuery(); // caller must iterate and close
+        } catch (SQLException e) {
+            System.err.println("Fetch reports failed: " + e.getMessage());
+            return null;
+        }
+    }
+    // Update report status (e.g., Approved, Rejected)
+    public static boolean updateReportStatus(int reportId, String newStatus) {
+        String sql = "UPDATE reports SET status=? WHERE id=?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newStatus);
+            pstmt.setInt(2, reportId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Update report status failed: " + e.getMessage());
+            return false;
+        }
+    }
+    // Get all reports submitted by a reporter
+    public static ResultSet getReportsByReporter(int reporterId) {
+        String sql = "SELECT * FROM reports WHERE reporter_id=?";
+        try {
+            Connection conn = DriverManager.getConnection(URL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, reporterId);
+            return pstmt.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Fetch reporter reports failed: " + e.getMessage());
+            return null;
+        }
+    }
+    // Insert notification for reporter
+    public static boolean insertNotification(int userId, int reportId, String message) {
+        String sql = "INSERT INTO notifications(user_id, report_id, message) VALUES(?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, reportId);   // ✅ এখন reportId save হবে
+            pstmt.setString(3, message);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Notification insert failed: " + e.getMessage());
+            return false;
+        }
+    }
+    public static boolean deleteNotificationByReportId(int reportId) {
+        String sql = "DELETE FROM notifications WHERE report_id=?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, reportId);
+            int affected = pstmt.executeUpdate();
+            return affected > 0;
+        } catch (SQLException e) {
+            System.err.println("Delete notification failed: " + e.getMessage());
             return false;
         }
     }
