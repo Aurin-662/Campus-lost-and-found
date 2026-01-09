@@ -1,12 +1,17 @@
 package org.example.lost2207107;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class detailsC {
 
@@ -85,8 +90,40 @@ public class detailsC {
             return;
         }
 
-        // TODO: open an edit form pre-filled with this item’s data
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Edit feature coming soon!");
-        alert.showAndWait();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(isLostItem ? "lost.fxml" : "found.fxml"));
+            Parent root = loader.load();
+
+            if (isLostItem) {
+                lostC controller = loader.getController();
+                controller.setEditData(itemId,
+                        itemNameLabel.getText().replace("Item: ", ""),
+                        descriptionLabel.getText().replace("Description: ", ""),
+                        locationLabel.getText().replace("Location: ", ""),
+                        dateLabel.getText().replace("Date Lost: ", ""),
+                        contactLabel.getText().replace("Contact: ", ""),
+                        itemImage.getImage() != null ? itemImage.getImage().getUrl() : null
+                );
+            } else {
+                foundC controller = loader.getController();
+                controller.setEditData(itemId,
+                        itemNameLabel.getText().replace("Item: ", ""),
+                        descriptionLabel.getText().replace("Description: ", ""),
+                        locationLabel.getText().replace("Location: ", ""),
+                        dateLabel.getText().replace("Date Found: ", ""),
+                        contactLabel.getText().replace("Contact: ", ""),
+                        itemImage.getImage() != null ? itemImage.getImage().getUrl() : null
+                );
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Item");
+            stage.setScene(new Scene(root, 600, 400));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to open edit form.");
+            alert.showAndWait();
+        }
     }
 }

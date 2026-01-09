@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class lostC {
@@ -36,6 +37,10 @@ public class lostC {
 
     private String selectedImagePath = null;
 
+    // Edit mode flags
+    private boolean isEditMode = false;
+    private int editingItemId = -1;
+
     @FXML
     public void initialize() {
         submitButton.setOnAction(event -> {
@@ -46,21 +51,38 @@ public class lostC {
             String contact = safe(contactInfoField.getText());
 
             int userId = loginC.getLoggedInUserId();
-            boolean success = DatabaseHelper.insertLostItem(
-                    userId,
-                    itemName,
-                    description,
-                    date,
-                    location,
-                    contact,
-                    selectedImagePath
-            );
+            boolean success;
+
+            if (isEditMode) {
+                //  Update existing lost item
+                success = DatabaseHelper.updateLostItem(
+                        editingItemId,
+                        userId,
+                        itemName,
+                        description,
+                        date,
+                        location,
+                        contact,
+                        selectedImagePath
+                );
+            } else {
+                // Insert new lost item
+                success = DatabaseHelper.insertLostItem(
+                        userId,
+                        itemName,
+                        description,
+                        date,
+                        location,
+                        contact,
+                        selectedImagePath
+                );
+            }
 
             if (success) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
-                alert.setHeaderText("Lost Item Submitted");
-                alert.setContentText("Your lost item has been recorded.");
+                alert.setHeaderText(isEditMode ? "Lost Item Updated" : "Lost Item Submitted");
+                alert.setContentText(isEditMode ? "Your lost item has been updated." : "Your lost item has been recorded.");
                 alert.showAndWait();
 
                 // Show in view scene
@@ -68,7 +90,7 @@ public class lostC {
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
-                alert.setHeaderText("Submission Failed");
+                alert.setHeaderText(isEditMode ? "Update Failed" : "Submission Failed");
                 alert.setContentText("Could not save lost item. Try again.");
                 alert.showAndWait();
             }
@@ -106,14 +128,42 @@ public class lostC {
         });
     }
 
+    //  Called from detailsC when Edit button clicked
+    public void setEditData(int itemId, String itemName, String description, String location,
+                            String date, String contact, String imagePath) {
+        isEditMode = true;
+        editingItemId = itemId;
+
+        itemNameField.setText(itemName);
+        descriptionArea.setText(description);
+        locationField.setText(location);
+
+        if (date != null && !date.isBlank()) {
+            try {
+                datePicker.setValue(LocalDate.parse(date));
+            } catch (Exception e) {
+                // ignore parse error
+            }
+        }
+
+        contactInfoField.setText(contact);
+
+        if (imagePath != null && !imagePath.isBlank()) {
+            selectedImagePath = imagePath;
+            Image image = new Image(imagePath, 100, 100, true, true);
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+            thumbnailContainer.getChildren().clear();
+            thumbnailContainer.getChildren().add(imageView);
+        }
+    }
+
     private void showViewScene(String itemName, String description, String location,
                                String date, String contact, String imagePath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view.fxml"));
             Parent root = loader.load();
-
-            viewC controller = loader.getController();
-         //   controller.addLostItem(itemName, description, location, date, contact, imagePath);
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             Scene scene = new Scene(root, 900, 600);

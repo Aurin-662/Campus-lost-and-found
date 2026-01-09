@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class foundC {
@@ -36,6 +37,10 @@ public class foundC {
 
     private String selectedImagePath = null;
 
+    // ✅ Edit mode flags
+    private boolean isEditMode = false;
+    private int editingItemId = -1;
+
     @FXML
     public void initialize() {
         submitButton.setOnAction(event -> {
@@ -45,22 +50,39 @@ public class foundC {
             String date = (datePicker.getValue() != null) ? datePicker.getValue().toString() : "";
             String contact = safe(contactInfoField.getText());
 
-            int userId = loginC.getLoggedInUserId(); 
-            boolean success = DatabaseHelper.insertFoundItem(
-                    userId,
-                    itemName,
-                    description,
-                    date,
-                    location,
-                    contact,
-                    selectedImagePath
-            );
+            int userId = loginC.getLoggedInUserId();
+            boolean success;
+
+            if (isEditMode) {
+                // ✅ Update existing item
+                success = DatabaseHelper.updateFoundItem(
+                        editingItemId,
+                        userId,
+                        itemName,
+                        description,
+                        date,
+                        location,
+                        contact,
+                        selectedImagePath
+                );
+            } else {
+                // ✅ Insert new item
+                success = DatabaseHelper.insertFoundItem(
+                        userId,
+                        itemName,
+                        description,
+                        date,
+                        location,
+                        contact,
+                        selectedImagePath
+                );
+            }
 
             if (success) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
-                alert.setHeaderText("Found Item Submitted");
-                alert.setContentText("Your found item has been recorded.");
+                alert.setHeaderText(isEditMode ? "Found Item Updated" : "Found Item Submitted");
+                alert.setContentText(isEditMode ? "Your found item has been updated." : "Your found item has been recorded.");
                 alert.showAndWait();
 
                 // Show in view scene
@@ -68,7 +90,7 @@ public class foundC {
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
-                alert.setHeaderText("Submission Failed");
+                alert.setHeaderText(isEditMode ? "Update Failed" : "Submission Failed");
                 alert.setContentText("Could not save found item. Try again.");
                 alert.showAndWait();
             }
@@ -106,14 +128,42 @@ public class foundC {
         });
     }
 
+    // Called from detailsC when Edit button clicked
+    public void setEditData(int itemId, String itemName, String description, String location,
+                            String date, String contact, String imagePath) {
+        isEditMode = true;
+        editingItemId = itemId;
+
+        itemNameField.setText(itemName);
+        descriptionArea.setText(description);
+        locationField.setText(location);
+
+        if (date != null && !date.isBlank()) {
+            try {
+                datePicker.setValue(LocalDate.parse(date));
+            } catch (Exception e) {
+                // ignore parse error
+            }
+        }
+
+        contactInfoField.setText(contact);
+
+        if (imagePath != null && !imagePath.isBlank()) {
+            selectedImagePath = imagePath;
+            Image image = new Image(imagePath, 100, 100, true, true);
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+            thumbnailContainer.getChildren().clear();
+            thumbnailContainer.getChildren().add(imageView);
+        }
+    }
+
     private void showViewScene(String itemName, String description, String location,
                                String date, String contact, String imagePath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view.fxml"));
             Parent root = loader.load();
-
-            viewC controller = loader.getController();
-          //  controller.addFoundItem(itemName, description, location, date, contact, imagePath);
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             Scene scene = new Scene(root, 900, 600);

@@ -138,6 +138,48 @@ public class DatabaseHelper {
         }
     }
 
+    // Update lost item (ownership enforced)
+    public static boolean updateLostItem(int itemId, int userId, String itemName, String description,
+                                         String dateLost, String location, String contact, String imagePath) {
+        String sql = "UPDATE lost_items SET item_name=?, description=?, date_lost=?, location=?, contact=?, image_path=? WHERE id=? AND user_id=?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, itemName);
+            pstmt.setString(2, description);
+            pstmt.setString(3, dateLost);
+            pstmt.setString(4, location);
+            pstmt.setString(5, contact);
+            pstmt.setString(6, imagePath);
+            pstmt.setInt(7, itemId);
+            pstmt.setInt(8, userId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Update lost item failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    //  Update found item (ownership enforced)
+    public static boolean updateFoundItem(int itemId, int userId, String itemName, String description,
+                                          String dateFound, String location, String contact, String imagePath) {
+        String sql = "UPDATE found_items SET item_name=?, description=?, date_found=?, location=?, contact=?, image_path=? WHERE id=? AND user_id=?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, itemName);
+            pstmt.setString(2, description);
+            pstmt.setString(3, dateFound);
+            pstmt.setString(4, location);
+            pstmt.setString(5, contact);
+            pstmt.setString(6, imagePath);
+            pstmt.setInt(7, itemId);
+            pstmt.setInt(8, userId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Update found item failed: " + e.getMessage());
+            return false;
+        }
+    }
+
     // Delete lost item (ownership enforced)
     public static boolean deleteLostItem(int itemId, int userId) {
         String sql = "DELETE FROM lost_items WHERE id=? AND user_id=?";
