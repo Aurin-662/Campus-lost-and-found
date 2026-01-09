@@ -59,7 +59,7 @@ public class detailsC {
         deleteButton.setOnAction(e -> deleteItem());
         editButton.setOnAction(e -> editItem());
 
-        //  Non-owner actions
+        // Non-owner actions
         if (!isOwner) {
             if (isLostItem) {
                 foundButton.setVisible(true);
@@ -73,8 +73,7 @@ public class detailsC {
 
     private void deleteItem() {
         if (itemUserId != currentUserId) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Delete failed. You are not the owner.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Delete failed. You are not the owner.").showAndWait();
             return;
         }
 
@@ -86,20 +85,17 @@ public class detailsC {
         }
 
         if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Item deleted successfully.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Item deleted successfully.").showAndWait();
             Stage stage = (Stage) deleteButton.getScene().getWindow();
             stage.close();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Delete failed.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Delete failed.").showAndWait();
         }
     }
 
     private void editItem() {
         if (itemUserId != currentUserId) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Edit failed. You are not the owner.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Edit failed. You are not the owner.").showAndWait();
             return;
         }
 
@@ -135,31 +131,30 @@ public class detailsC {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to open edit form.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to open edit form.").showAndWait();
         }
     }
 
-    //  Non-owner actions
+    // Non-owner actions
     private void reportFoundItem() {
+        // Lost item → someone reports it as found
         boolean success = DatabaseHelper.createReport(itemId, 0, currentUserId);
         if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Owner has been notified that you found this item.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Owner has been notified that you found this item.\nStatus: Pending until owner approves.").showAndWait();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to notify owner.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to notify owner.").showAndWait();
         }
     }
 
     private void claimFoundItem() {
+        // Found item → someone claims it
         boolean success = DatabaseHelper.createReport(0, itemId, currentUserId);
         if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Owner has been notified of your claim.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Owner has been notified of your claim.\nStatus: Pending until owner approves.").showAndWait();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to notify owner.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to notify owner.").showAndWait();
         }
     }
 }

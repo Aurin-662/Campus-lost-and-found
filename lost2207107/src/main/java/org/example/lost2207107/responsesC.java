@@ -18,7 +18,7 @@ public class responsesC {
 
     @FXML private TableView<ReportRow> reportsTable;
     @FXML private TableColumn<ReportRow, Integer> idCol;
-    @FXML private TableColumn<ReportRow, String> itemCol;      // ✅ new column for item info
+    @FXML private TableColumn<ReportRow, String> itemCol;
     @FXML private TableColumn<ReportRow, Integer> reporterCol;
     @FXML private TableColumn<ReportRow, String> statusCol;
 
@@ -34,8 +34,6 @@ public class responsesC {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         reporterCol.setCellValueFactory(new PropertyValueFactory<>("reporterId"));
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-        // ✅ Bind item info using ReportRow.getItemInfo()
         itemCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getItemInfo()));
 
         ownerId = loginC.getLoggedInUserId();
@@ -43,28 +41,28 @@ public class responsesC {
 
         approveButton.setOnAction(e -> updateSelectedReport("Approved"));
         rejectButton.setOnAction(e -> updateSelectedReport("Rejected"));
-        backButton.setOnAction(e -> goBack());   // Back button action
+        backButton.setOnAction(e -> goBack());
         deleteButton.setOnAction(e -> deleteSelectedNotification());
     }
 
-    // ✅ Delete notification by reportId
+    // ✅ Delete notification by reportId and remove row from table
     private void deleteSelectedNotification() {
         ReportRow selected = reportsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "No report selected.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.WARNING, "No report selected.").showAndWait();
             return;
         }
 
         boolean success = DatabaseHelper.deleteNotificationByReportId(selected.getId());
-        if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                    "Notification deleted for Report ID " + selected.getId());
-            alert.showAndWait();
+        boolean reportDeleted = DatabaseHelper.deleteReport(selected.getId()); // ✅ delete report too
+
+        if (success || reportDeleted) {
+            reportsTable.getItems().remove(selected);
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Report & Notification deleted for Report ID " + selected.getId()).showAndWait();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR,
-                    "Failed to delete notification.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR,
+                    "Failed to delete report/notification.").showAndWait();
         }
     }
 
@@ -97,30 +95,23 @@ public class responsesC {
     private void updateSelectedReport(String newStatus) {
         ReportRow selected = reportsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "No report selected.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.WARNING, "No report selected.").showAndWait();
             return;
         }
 
         boolean success = DatabaseHelper.updateReportStatus(selected.getId(), newStatus);
         if (success) {
-            // Reporter side notification: insert/update message
-            String msg;
-            if ("Approved".equalsIgnoreCase(newStatus)) {
-                msg = "Your claim/found request for item has been approved (Report ID " + selected.getId() + ")";
-            } else {
-                msg = "Your claim/found request for item has been rejected (Report ID " + selected.getId() + ")";
-            }
+            String msg = ("Approved".equalsIgnoreCase(newStatus))
+                    ? "Your claim/found request for item has been approved (Report ID " + selected.getId() + ")"
+                    : "Your claim/found request for item has been rejected (Report ID " + selected.getId() + ")";
 
             // ✅ Insert notification with reportId
             DatabaseHelper.insertNotification(selected.getReporterId(), selected.getId(), msg);
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Report updated to " + newStatus);
-            alert.showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Report updated to " + newStatus).showAndWait();
             loadReports();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to update report.");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to update report.").showAndWait();
         }
     }
 
@@ -133,8 +124,7 @@ public class responsesC {
             stage.getScene().setRoot(root);
         } catch (Exception ex) {
             ex.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load view.fxml");
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to load view.fxml").showAndWait();
         }
     }
 }
