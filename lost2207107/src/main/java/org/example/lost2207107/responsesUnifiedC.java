@@ -14,9 +14,9 @@ import java.sql.SQLException;
 public class responsesUnifiedC {
 
     @FXML private TableView<Object> reportsTable;
-    @FXML private TableColumn<Object, Integer> idCol;
+   // @FXML private TableColumn<Object, Integer> idCol;
     @FXML private TableColumn<Object, String> itemCol;
-    @FXML private TableColumn<Object, Integer> reporterCol;
+  //  @FXML private TableColumn<Object, Integer> reporterCol;
     @FXML private TableColumn<Object, String> statusCol;
 
     @FXML private Button approveButton;
@@ -30,15 +30,15 @@ public class responsesUnifiedC {
     public void initialize() {
         userId = loginC.getLoggedInUserId();
 
-        idCol.setCellValueFactory(data -> {
-            Object row = data.getValue();
-            if (row instanceof ReportRow r) {
-                return new SimpleIntegerProperty(r.getId()).asObject();
-            } else if (row instanceof NotificationRow n) {
-                return new SimpleIntegerProperty(n.getReportId()).asObject();
-            }
-            return null;
-        });
+//        idCol.setCellValueFactory(data -> {
+//            Object row = data.getValue();
+//            if (row instanceof ReportRow r) {
+//                return new SimpleIntegerProperty(r.getId()).asObject();
+//            } else if (row instanceof NotificationRow n) {
+//                return new SimpleIntegerProperty(n.getReportId()).asObject();
+//            }
+//            return null;
+//        });
 
         itemCol.setCellValueFactory(data -> {
             Object row = data.getValue();
@@ -50,13 +50,13 @@ public class responsesUnifiedC {
             return null;
         });
 
-        reporterCol.setCellValueFactory(data -> {
-            Object row = data.getValue();
-            if (row instanceof ReportRow r) {
-                return new SimpleIntegerProperty(r.getReporterId()).asObject();
-            }
-            return null;
-        });
+//        reporterCol.setCellValueFactory(data -> {
+//            Object row = data.getValue();
+//            if (row instanceof ReportRow r) {
+//                return new SimpleIntegerProperty(r.getReporterId()).asObject();
+//            }
+//            return null;
+//        });
 
         statusCol.setCellValueFactory(data -> {
             Object row = data.getValue();
@@ -66,6 +66,35 @@ public class responsesUnifiedC {
                 return new SimpleStringProperty(n.getStatus());
             }
             return null;
+        });
+        reportsTable.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(Object item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setStyle("");
+                    return;
+                }
+
+                if (item instanceof ReportRow r) {
+                    String baseStyle = switch (r.getStatus()) {
+                        case "Pending" -> "-fx-background-color: #fff8dc;"; // light yellow
+                        case "Approved", "Claimed" -> "-fx-background-color: #e0ffe0;"; // light green
+                        case "Rejected" -> "-fx-background-color: #ffe0e0;"; // light red
+                        default -> "";
+                    };
+
+                    // 🔒 Preserve highlight even when selected
+                    if (isSelected()) {
+                        setStyle(baseStyle + " -fx-text-fill: black;");
+                    } else {
+                        setStyle(baseStyle);
+                    }
+                } else {
+                    setStyle("");
+                }
+            }
         });
 
         loadData();

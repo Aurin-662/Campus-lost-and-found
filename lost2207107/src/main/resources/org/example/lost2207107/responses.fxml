@@ -19,9 +19,9 @@
     <children>
         <TableView fx:id="reportsTable" prefHeight="400">
             <columns>
-                <TableColumn fx:id="idCol" text="Report ID" prefWidth="80"/>
+<!--                <TableColumn fx:id="idCol" text="Report ID" prefWidth="80"/>-->
                 <TableColumn fx:id="itemCol" text="Item Info" prefWidth="300"/>
-                <TableColumn fx:id="reporterCol" text="Reporter ID" prefWidth="100"/>
+<!--                <TableColumn fx:id="reporterCol" text="Reporter ID" prefWidth="100"/>-->
                 <TableColumn fx:id="statusCol" text="Status" prefWidth="120"/>
             </columns>
         </TableView>
