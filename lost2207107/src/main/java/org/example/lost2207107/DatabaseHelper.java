@@ -313,7 +313,7 @@ public class DatabaseHelper {
             Connection conn = DriverManager.getConnection(URL);
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, reporterId);
-            return pstmt.executeQuery();
+            return pstmt.executeQuery(); // caller must iterate and close
         } catch (SQLException e) {
             System.err.println("Fetch reporter reports failed: " + e.getMessage());
             return null;
@@ -375,5 +375,29 @@ public class DatabaseHelper {
             return null;
         }
     }
+    public static int getOwnerIdForLostItem(int lostItemId) {
+        String sql = "SELECT user_id FROM lost_items WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, lostItemId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) return rs.getInt("user_id");
+        } catch (SQLException e) {
+            System.err.println("Owner fetch failed: " + e.getMessage());
+        }
+        return -1;
+    }
 
+    public static int getOwnerIdForFoundItem(int foundItemId) {
+        String sql = "SELECT user_id FROM found_items WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, foundItemId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) return rs.getInt("user_id");
+        } catch (SQLException e) {
+            System.err.println("Owner fetch failed: " + e.getMessage());
+        }
+        return -1;
+    }
 }

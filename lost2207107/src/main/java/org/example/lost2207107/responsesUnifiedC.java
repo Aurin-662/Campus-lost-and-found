@@ -30,7 +30,6 @@ public class responsesUnifiedC {
     public void initialize() {
         userId = loginC.getLoggedInUserId();
 
-        // Report ID column
         idCol.setCellValueFactory(data -> {
             Object row = data.getValue();
             if (row instanceof ReportRow r) {
@@ -41,7 +40,6 @@ public class responsesUnifiedC {
             return null;
         });
 
-        // Item info column
         itemCol.setCellValueFactory(data -> {
             Object row = data.getValue();
             if (row instanceof ReportRow r) {
@@ -52,7 +50,6 @@ public class responsesUnifiedC {
             return null;
         });
 
-        //  Reporter ID column
         reporterCol.setCellValueFactory(data -> {
             Object row = data.getValue();
             if (row instanceof ReportRow r) {
@@ -61,7 +58,6 @@ public class responsesUnifiedC {
             return null;
         });
 
-        //  Status column
         statusCol.setCellValueFactory(data -> {
             Object row = data.getValue();
             if (row instanceof ReportRow r) {
@@ -75,20 +71,15 @@ public class responsesUnifiedC {
         loadData();
     }
 
-    //  Decide OWNER or REPORTER
+    // 🔁 Load both owner and reporter reports
     private void loadData() {
         reportsTable.getItems().clear();
 
         try {
+            // Owner reports
             ResultSet ownerRs = DatabaseHelper.getReportsForOwner(userId);
-
-            if (ownerRs != null && ownerRs.next()) {
-                //  OWNER MODE
-                approveButton.setVisible(true);
-                rejectButton.setVisible(true);
-                deleteButton.setVisible(true);
-
-                do {
+            if (ownerRs != null) {
+                while (ownerRs.next()) {
                     reportsTable.getItems().add(new ReportRow(
                             ownerRs.getInt("id"),
                             ownerRs.getInt("lost_item_id"),
@@ -102,16 +93,13 @@ public class responsesUnifiedC {
                             ownerRs.getString("found_location"),
                             ownerRs.getString("found_date")
                     ));
-                } while (ownerRs.next());
+                }
+            }
 
-            } else {
-                // 🟢 REPORTER MODE
-                approveButton.setVisible(false);
-                rejectButton.setVisible(false);
-                deleteButton.setVisible(false);
-
-                ResultSet reporterRs = DatabaseHelper.getReportsByReporter(userId);
-                while (reporterRs != null && reporterRs.next()) {
+            // Reporter reports
+            ResultSet reporterRs = DatabaseHelper.getReportsByReporter(userId);
+            if (reporterRs != null) {
+                while (reporterRs.next()) {
                     reportsTable.getItems().add(new ReportRow(
                             reporterRs.getInt("id"),
                             reporterRs.getInt("lost_item_id"),
@@ -127,12 +115,18 @@ public class responsesUnifiedC {
                     ));
                 }
             }
+
+            // Buttons visible logic
+            approveButton.setVisible(true);
+            rejectButton.setVisible(true);
+            deleteButton.setVisible(true);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // OWNER ACTIONS
+    // ✅ OWNER ACTIONS
     @FXML
     private void approveSelected() {
         updateSelected("Approved");
@@ -147,6 +141,23 @@ public class responsesUnifiedC {
         Object selected = reportsTable.getSelectionModel().getSelectedItem();
         if (!(selected instanceof ReportRow r)) return;
 
+        // 🔒 Check ownership before approving/rejecting
+        boolean isOwner = false;
+        if (r.getLostItemId() > 0) {
+            int ownerId = DatabaseHelper.getOwnerIdForLostItem(r.getLostItemId());
+            isOwner = (ownerId == userId);
+        } else if (r.getFoundItemId() > 0) {
+            int ownerId = DatabaseHelper.getOwnerIdForFoundItem(r.getFoundItemId());
+            isOwner = (ownerId == userId);
+        }
+
+        if (!isOwner) {
+            new Alert(Alert.AlertType.ERROR,
+                    "❌ You cannot approve/reject this report. Wait for the item owner.").showAndWait();
+            return;
+        }
+
+        // ✅ Owner confirmed → proceed
         DatabaseHelper.updateReportStatus(r.getId(), status);
         DatabaseHelper.insertNotification(
                 r.getReporterId(),
