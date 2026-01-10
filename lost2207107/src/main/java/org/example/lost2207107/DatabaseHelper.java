@@ -233,28 +233,37 @@ public class DatabaseHelper {
     public static boolean createReport(int lostItemId, int foundItemId, int reporterId) {
         String sql = "INSERT INTO reports(lost_item_id, found_item_id, reporter_id, status) VALUES(?, ?, ?, 'Pending')";
         try (Connection conn = DriverManager.getConnection(URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            if (lostItemId > 0) {
-                pstmt.setInt(1, lostItemId);
-            } else {
-                pstmt.setNull(1, Types.INTEGER);
-            }
+            if (lostItemId > 0) pstmt.setInt(1, lostItemId);
+            else pstmt.setNull(1, Types.INTEGER);
 
-            if (foundItemId > 0) {
-                pstmt.setInt(2, foundItemId);
-            } else {
-                pstmt.setNull(2, Types.INTEGER);
-            }
+            if (foundItemId > 0) pstmt.setInt(2, foundItemId);
+            else pstmt.setNull(2, Types.INTEGER);
 
             pstmt.setInt(3, reporterId);
             pstmt.executeUpdate();
+
+            // 🔥 get generated report id
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                int reportId = rs.getInt(1);
+
+                // ✅ insert pending notification for reporter
+                insertNotification(
+                        reporterId,
+                        reportId,
+                        "Your claim/found request is pending approval (Report ID " + reportId + ")"
+                );
+            }
+
             return true;
         } catch (SQLException e) {
             System.err.println("Report creation failed: " + e.getMessage());
             return false;
         }
     }
+
 
     // Get all reports for a given owner (lost or found items)
     public static ResultSet getReportsForOwner(int ownerId) {
@@ -293,7 +302,13 @@ public class DatabaseHelper {
 
     // Get all reports submitted by a reporter
     public static ResultSet getReportsByReporter(int reporterId) {
-        String sql = "SELECT * FROM reports WHERE reporter_id=?";
+        String sql = "SELECT r.id, r.lost_item_id, r.found_item_id, r.reporter_id, r.status, " +
+                "l.item_name AS lost_name, l.location AS lost_location, l.date_lost AS lost_date, " +
+                "f.item_name AS found_name, f.location AS found_location, f.date_found AS found_date " +
+                "FROM reports r " +
+                "LEFT JOIN lost_items l ON r.lost_item_id = l.id " +
+                "LEFT JOIN found_items f ON r.found_item_id = f.id " +
+                "WHERE r.reporter_id = ?";
         try {
             Connection conn = DriverManager.getConnection(URL);
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -346,6 +361,18 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             System.err.println("Delete report failed: " + e.getMessage());
             return false;
+        }
+    }
+    public static ResultSet getNotificationsForUser(int userId) {
+        String sql = "SELECT * FROM notifications WHERE user_id=? ORDER BY timestamp DESC";
+        try {
+            Connection conn = DriverManager.getConnection(URL);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            return pstmt.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Fetch notifications failed: " + e.getMessage());
+            return null;
         }
     }
 

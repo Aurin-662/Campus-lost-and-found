@@ -9,7 +9,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.lost2207107.responsesC"
+      fx:controller="org.example.lost2207107.responsesUnifiedC"
       spacing="15" prefWidth="800" prefHeight="500">
 
     <padding>
@@ -20,7 +20,6 @@
         <TableView fx:id="reportsTable" prefHeight="400">
             <columns>
                 <TableColumn fx:id="idCol" text="Report ID" prefWidth="80"/>
-                <!-- New column for item details -->
                 <TableColumn fx:id="itemCol" text="Item Info" prefWidth="300"/>
                 <TableColumn fx:id="reporterCol" text="Reporter ID" prefWidth="100"/>
                 <TableColumn fx:id="statusCol" text="Status" prefWidth="120"/>
@@ -29,10 +28,21 @@
 
         <HBox spacing="10" alignment="CENTER_RIGHT">
             <children>
-                <Button fx:id="approveButton" text="Approve" styleClass="primary-button"/>
-                <Button fx:id="rejectButton" text="Reject" styleClass="danger-button"/>
-                <Button fx:id="deleteButton" text="Delete Notification" styleClass="secondary-button"/>
-                <Button fx:id="backButton" text="Back" styleClass="secondary-button"/>
+                <Button fx:id="approveButton"
+                        text="Approve"
+                        onAction="#approveSelected"/>
+
+                <Button fx:id="rejectButton"
+                        text="Reject"
+                        onAction="#rejectSelected"/>
+
+                <Button fx:id="deleteButton"
+                        text="Delete Notification"
+                        onAction="#deleteSelected"/>
+
+                <Button fx:id="backButton"
+                        text="Back"
+                        onAction="#goBack"/>
             </children>
         </HBox>
     </children>
