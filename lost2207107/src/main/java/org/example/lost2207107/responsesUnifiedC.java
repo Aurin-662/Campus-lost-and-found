@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
@@ -215,8 +216,15 @@ public class responsesUnifiedC {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view.fxml"));
             Parent root = loader.load();
+
             Stage stage = (Stage) reportsTable.getScene().getWindow();
-            stage.getScene().setRoot(root);
+
+            Scene scene = new Scene(root);
+
+            scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
+
+            stage.setScene(scene);
+            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

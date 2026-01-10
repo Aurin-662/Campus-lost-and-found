@@ -41,6 +41,7 @@ public class itemsC {
 
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root1);
+        scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }
