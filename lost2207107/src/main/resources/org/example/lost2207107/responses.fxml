@@ -4,46 +4,50 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.lost2207107.responsesUnifiedC"
-      spacing="15" prefWidth="800" prefHeight="500">
+<ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.lost2207107.responsesUnifiedC">
 
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+    <content>
+        <VBox spacing="15" prefWidth="800" prefHeight="500">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
 
-    <children>
-        <TableView fx:id="reportsTable" prefHeight="400">
-            <columns>
-<!--                <TableColumn fx:id="idCol" text="Report ID" prefWidth="80"/>-->
-                <TableColumn fx:id="itemCol" text="Item Info" prefWidth="300"/>
-<!--                <TableColumn fx:id="reporterCol" text="Reporter ID" prefWidth="100"/>-->
-                <TableColumn fx:id="statusCol" text="Status" prefWidth="120"/>
-            </columns>
-        </TableView>
-
-        <HBox spacing="10" alignment="CENTER_RIGHT">
             <children>
-                <Button fx:id="approveButton"
-                        text="Approve"
-                        onAction="#approveSelected"/>
+                <TableView fx:id="reportsTable" prefHeight="400">
+                    <columns>
+                        <!-- <TableColumn fx:id="idCol" text="Report ID" prefWidth="80"/> -->
+                        <TableColumn fx:id="itemCol" text="Item Info" prefWidth="300"/>
+                        <!-- <TableColumn fx:id="reporterCol" text="Reporter ID" prefWidth="100"/> -->
+                        <TableColumn fx:id="statusCol" text="Status" prefWidth="120"/>
+                    </columns>
+                </TableView>
 
-                <Button fx:id="rejectButton"
-                        text="Reject"
-                        onAction="#rejectSelected"/>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <children>
+                        <Button fx:id="approveButton"
+                                text="Approve"
+                                onAction="#approveSelected"/>
 
-                <Button fx:id="deleteButton"
-                        text="Delete Notification"
-                        onAction="#deleteSelected"/>
+                        <Button fx:id="rejectButton"
+                                text="Reject"
+                                onAction="#rejectSelected"/>
 
-                <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#goBack"/>
+                        <Button fx:id="deleteButton"
+                                text="Delete Notification"
+                                onAction="#deleteSelected"/>
+
+                        <Button fx:id="backButton"
+                                text="Back"
+                                onAction="#goBack"/>
+                    </children>
+                </HBox>
             </children>
-        </HBox>
-    </children>
-</VBox>
+        </VBox>
+    </content>
+</ScrollPane>

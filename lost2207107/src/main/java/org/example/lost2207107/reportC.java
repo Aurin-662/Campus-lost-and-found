@@ -76,6 +76,7 @@ public class reportC {
 
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/light.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }
